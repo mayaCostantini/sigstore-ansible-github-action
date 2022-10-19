@@ -1,35 +1,32 @@
-gh-action-sigstore-python
+Sigstore Ansible GitHub Action
 =========================
 
-[![CI](https://github.com/sigstore/gh-action-sigstore-python/actions/workflows/ci.yml/badge.svg)](https://github.com/sigstore/gh-action-sigstore-python/actions/workflows/ci.yml)
-[![Self-test](https://github.com/sigstore/gh-action-sigstore-python/actions/workflows/selftest.yml/badge.svg)](https://github.com/sigstore/gh-action-sigstore-python/actions/workflows/selftest.yml)
+A first try at a GitHub Action forked from the [sigstore-python GitHub Action](https://github.com/sigstore/gh-action-sigstore-python) to sign Ansible content with Sigstore.
 
-A GitHub Action that uses [`sigstore-python`](https://github.com/sigstore/sigstore-python)
-to sign Python packages.
+WARNING: This GitHub Action is still at an experimental state.
 
 ## Index
 
 * [Usage](#usage)
 * [Configuration](#configuration)
-  * [⚠️ Internal options ⚠️](#internal-options)
 * [Licensing](#licensing)
 * [Code of Conduct](#code-of-conduct)
 
 ## Usage
 
-Simply add `sigstore/gh-action-sigstore-python` to one of your workflows:
+Add this GitHub Action to one of your workflows:
 
 ```yaml
 jobs:
-  selftest:
+  sign-collection:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
       - name: install
         run: python -m pip install .
-      - uses: sigstore/gh-action-sigstore-python@v0.0.9
+      - uses: mayaCostantini/sigstore-ansible-github-action@v0.0.1
         with:
-          inputs: file.txt
+          content-type: collection
 ```
 
 Your workflow must have permission to request the OIDC token to authenticate with. This can be done
@@ -44,29 +41,7 @@ More information about permission settings can be found [here](https://docs.gith
 
 ## Configuration
 
-`gh-action-sigstore-python` takes a variety of configuration inputs, most of which are
-optional.
-
-### `inputs`
-
-The `inputs` setting controls what files `sigstore-python` signs. At least one input must be
-provided.
-
-To sign one or more files:
-
-```yaml
-- uses: sigstore/gh-action-sigstore-python@v0.0.9
-  with:
-    inputs: file0.txt file1.txt file2.txt
-```
-
-The `inputs` argument also supports file globbing:
-
-```yaml
-- uses: sigstore/gh-action-sigstore-python@v0.0.9
-  with:
-    inputs: ./path/to/inputs/*.txt
-```
+`sigstore-ansible-github-action` automatically generates and signs a MANIFEST.json file containing the checksums for all the files in the content repository on a pull request merge or new release creation, producing the MANIFEST.json.asc and MANIFEST.json.crt artifacts that will be used for signature verification in Ansible.
 
 ### `identity-token`
 
@@ -78,7 +53,6 @@ workflow will use the credentials found in the GitHub Actions environment.
 ```yaml
 - uses: sigstore/gh-action-sigstore-python@v0.0.9
   with:
-    inputs: file.txt
     identity-token: ${{ IDENTITY_TOKEN  }} # assigned elsewhere
 ```
 
@@ -94,7 +68,6 @@ Example:
 ```yaml
 - uses: sigstore/gh-action-sigstore-python@v0.0.9
   with:
-    inputs: file.txt
     oidc-client-id: alternative-sigstore-id
 ```
 
@@ -110,7 +83,6 @@ Example:
 ```yaml
 - uses: sigstore/gh-action-sigstore-python@v0.0.9
   with:
-    inputs: file.txt
     oidc-client-secret: alternative-sigstore-secret
 ```
 
@@ -118,24 +90,12 @@ Example:
 
 **Default**: Empty (signature files will get named as `{input}.sig`)
 
-The `signature` setting controls the name of the output signature file. This setting does not work
-when signing multiple input files.
-
+The `signature` setting controls the name of the output signature file.
 Example:
 
 ```yaml
 - uses: sigstore/gh-action-sigstore-python@v0.0.9
   with:
-    inputs: file.txt
-    signature: custom-signature-filename.sig
-```
-
-However, this example is invalid:
-
-```yaml
-- uses: sigstore/gh-action-sigstore-python@v0.0.9
-  with:
-    inputs: file0.txt file1.txt file2.txt
     signature: custom-signature-filename.sig
 ```
 
@@ -143,24 +103,13 @@ However, this example is invalid:
 
 **Default**: Empty (certificate files will get named as `{input}.crt`)
 
-The `certificate` setting controls the name of the output certificate file. This setting does not
-work when signing multiple input files.
+The `certificate` setting controls the name of the output certificate file.
 
 Example:
 
 ```yaml
 - uses: sigstore/gh-action-sigstore-python@v0.0.9
   with:
-    inputs: file.txt
-    certificate: custom-certificate-filename.crt
-```
-
-However, this example is invalid:
-
-```yaml
-- uses: sigstore/gh-action-sigstore-python@v0.0.9
-  with:
-    inputs: file0.txt file1.txt file2.txt
     certificate: custom-certificate-filename.crt
 ```
 
@@ -176,7 +125,6 @@ Example:
 ```yaml
 - uses: sigstore/gh-action-sigstore-python@v0.0.9
   with:
-    inputs: file.txt
     fulcio-url: https://fulcio.sigstage.dev
 ```
 
@@ -192,7 +140,6 @@ Example:
 ```yaml
 - uses: sigstore/gh-action-sigstore-python@v0.0.9
   with:
-    inputs: file.txt
     rekor-url: https://rekor.sigstage.dev
 ```
 
@@ -208,7 +155,6 @@ Example:
 ```yaml
 - uses: sigstore/gh-action-sigstore-python@v0.0.9
   with:
-    inputs: file.txt
     ctfe: ./path/to/ctfe.pub
 ```
 
@@ -224,7 +170,6 @@ Example:
 ```yaml
 - uses: sigstore/gh-action-sigstore-python@v0.0.9
   with:
-    inputs: file.txt
     ctfe: ./path/to/rekor.pub
 ```
 
@@ -240,7 +185,6 @@ Example:
 ```yaml
 - uses: sigstore/gh-action-sigstore-python@v0.0.9
   with:
-    inputs: file.txt
     staging: true
 ```
 
@@ -260,7 +204,6 @@ Example:
 ```yaml
 - uses: sigstore/gh-action-sigstore-python@v0.0.9
   with:
-    inputs: file.txt
     verify: false
 ```
 
@@ -277,7 +220,6 @@ This setting only applies if `verify` is set to `true`.
 ```yaml
 - uses: sigstore/gh-action-sigstore-python@v0.0.9
   with:
-    inputs: file.txt
     verify-cert-email: john.smith@example.com
 ```
 
@@ -296,7 +238,6 @@ Example:
 ```yaml
 - uses: sigstore/gh-action-sigstore-python@v0.0.9
   with:
-    inputs: file.txt
     verify-oidc-issuer: https://oauth2.sigstage.dev/auth
 ```
 
@@ -316,7 +257,6 @@ Example:
 ```yaml
 - uses: sigstore/gh-action-sigstore-python@v0.0.9
   with:
-    inputs: file.txt
     upload-signing-artifacts: true
 ```
 
@@ -341,38 +281,8 @@ permissions:
 
 - uses: sigstore/gh-action-sigstore-python@v0.0.9
   with:
-    inputs: file.txt
     release-signing-artifacts: true
 ```
-
-### Internal options
-<details>
-  <summary>⚠️ Internal options ⚠️</summary>
-
-  Everything below is considered "internal," which means that it
-  isn't part of the stable public settings and may be removed or changed at
-  any points. **You probably do not need these settings.**
-
-  All internal options are prefixed with `internal-be-careful-`.
-
-  #### `internal-be-careful-debug`
-
-  **Default**: `false`
-
-  The `internal-be-careful-debug` setting enables additional debug logs,
-  both within `sigstore-python` itself and the action's harness code. You can
-  use it to debug troublesome configurations.
-
-  Example:
-
-  ```yaml
-  - uses: sigstore/gh-action-sigstore-python@v0.0.9
-    with:
-      inputs: file.txt
-      internal-be-careful-debug: true
-  ```
-
-</details>
 
 ## Licensing
 

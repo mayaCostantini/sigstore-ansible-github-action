@@ -12,14 +12,10 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-name: "gh-action-sigstore-python"
+name: "sigstore-ansible-github-action"
 author: "Sigstore Authors <sigstore-dev@googlegroups.com>"
-description: "Use sigstore-python to sign Python packages"
+description: "Sign Ansible content with Sigstore"
 inputs:
-  inputs:
-    description: "the files to sign, whitespace separated"
-    required: true
-    default: ""
   identity-token:
     description: "the OIDC identity token to use"
     required: false
@@ -33,13 +29,13 @@ inputs:
     required: false
     default: ""
   signature:
-    description: "write a single signature to the given file; does not work with multiple input files"
+    description: "Signature output file name for the MANIFEST.json file"
     required: false
-    default: ""
+    default: "MANIFEST.json.asc"
   certificate:
-    description: "write a single certificate to the given file; does not work with multiple input files"
+    description: "Certificate output file name for the MANIFEST.json file"
     required: false
-    default: ""
+    default: "MANIFEST.json.crt"
   fulcio-url:
     description: "the Fulcio instance to use (conflicts with `staging`)"
     required: false
