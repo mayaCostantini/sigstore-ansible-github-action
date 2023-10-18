@@ -148,7 +148,7 @@ elif verify_oidc_issuer:
 verify_certificate_chain = os.getenv("GHA_SIGSTORE_PYTHON_VERIFY_CERTIFICATE_CHAIN")
 if not enable_verify and verify_certificate_chain:
     _fatal_help("verify-certificate-chain cannot be specified without verify: true")
-else:
+elif verify_certificate_chain:
     sigstore_verify_args.extend(["--certificate-chain", verify_certificate_chain])
 
 if enable_verify:
