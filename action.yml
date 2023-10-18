@@ -87,6 +87,14 @@ inputs:
 runs:
   using: "composite"
   steps:
+
+  # See: https://github.com/stefanzweifel/git-auto-commit-action/issues/229#issuecomment-1177711418
+    - name: Pull Remote Changes
+      run: git pull
+      shell: bash
+      if: ${{ inputs.push-artifacts != 'false' }}
+      working-directory: ${{ inputs.project_path }}
+      
     - name: Set up ansible-sign
       run: |
         # NOTE: Sourced, not executed as a script.
@@ -136,13 +144,6 @@ runs:
       run: echo "::set-output name=date::$(date +'%Y-%m-%d')"
       if: ${{ inputs.push-artifacts != 'false' }}
       shell: bash
-
-    # See: https://github.com/stefanzweifel/git-auto-commit-action/issues/229#issuecomment-1177711418
-    - name: Pull Remote Changes
-      run: git pull
-      shell: bash
-      if: ${{ inputs.push-artifacts != 'false' }}
-      working-directory: ${{ inputs.project_path }}
 
     - name: Commit changes
       uses: stefanzweifel/git-auto-commit-action@v4
