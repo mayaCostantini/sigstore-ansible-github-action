@@ -72,6 +72,7 @@ jobs:
           [[ -f ./test/.ansible-sign/sha256sum.txt.sigstore ]] || exit 1
 
   selftest-glob:
+    needs: [selftest, selftest-xfail-invalid-inputs, selftest-staging]
     runs-on: ubuntu-latest
     if: (github.event_name != 'pull_request') || !github.event.pull_request.head.repo.fork
     steps:
@@ -84,7 +85,7 @@ jobs:
           staging: true
 
   selftest-verify:
-    needs: [selftest, selftest-xfail-invalid-inputs, selftest-staging]
+    needs: [selftest, selftest-xfail-invalid-inputs, selftest-staging, selftest-glob]
     runs-on: ubuntu-latest
     if: (github.event_name != 'pull_request') || !github.event.pull_request.head.repo.fork
     steps:
@@ -100,7 +101,7 @@ jobs:
           staging: true
 
   selftest-xfail-verify-missing-options:
-    needs: [selftest, selftest-xfail-invalid-inputs, selftest-staging, selftest-verify]
+    needs: [selftest, selftest-xfail-invalid-inputs, selftest-staging, selftest-glob, selftest-verify]
     runs-on: ubuntu-latest
     strategy:
       matrix:
@@ -145,7 +146,7 @@ jobs:
           [[ "${XFAIL}" == "true" ]] || { >&2 echo "expected step to fail"; exit 1; }
 
   selftest-identity-token:
-    needs: [selftest, selftest-xfail-invalid-inputs, selftest-staging, selftest-verify, selftest-xfail-verify-missing-options]
+    needs: [selftest, selftest-xfail-invalid-inputs, selftest-staging, selftest-glob, selftest-verify, selftest-xfail-verify-missing-options]
     runs-on: ubuntu-latest
     if: (github.event_name != 'pull_request') || !github.event.pull_request.head.repo.fork
     steps:
