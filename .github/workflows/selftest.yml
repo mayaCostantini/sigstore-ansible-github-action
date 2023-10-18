@@ -99,6 +99,8 @@ jobs:
           verify-cert-identity: https://github.com/mayaCostantini/sigstore-ansible-github-action/.github/workflows/selftest.yml@${{ github.ref }}
           verify-oidc-issuer: https://token.actions.githubusercontent.com
           staging: true
+        env:
+          GHA_SIGSTORE_PYTHON_INTERNAL_BE_CAREFUL_DEBUG: true
 
   selftest-xfail-verify-missing-options:
     needs: [selftest, selftest-xfail-invalid-inputs, selftest-staging, selftest-glob, selftest-verify]
