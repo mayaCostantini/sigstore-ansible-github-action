@@ -3,8 +3,8 @@ Ansible-sign GitHub Action
 
 ⚠️ This project is a work in progress and is not ready for production use.
 
-[![CI](https://github.com/sigstore/gh-action-sigstore-python/actions/workflows/ci.yml/badge.svg)](https://github.com/sigstore/gh-action-sigstore-python/actions/workflows/ci.yml)
-[![Self-test](https://github.com/sigstore/gh-action-sigstore-python/actions/workflows/selftest.yml/badge.svg)](https://github.com/sigstore/gh-action-sigstore-python/actions/workflows/selftest.yml)
+[![CI](https://github.com/mayaCostantini/sigstore-ansible-github-action/actions/workflows/ci.yml/badge.svg)](https://github.com/mayaCostantini/sigstore-ansible-github-action/actions/workflows/ci.yml)
+[![Self-test](https://github.com/mayaCostantini/sigstore-ansible-github-action/actions/workflows/selftest.yml/badge.svg)](https://github.com/mayaCostantini/sigstore-ansible-github-action/actions/workflows/selftest.yml)
 
 A GitHub Action that uses [`ansible-sign`](https://github.com/ansible/ansible-sign) to generate Sigstore signatures for Ansible projects.
 This repository is a fork of [`gh-action-sigstore-python`](https://github.com/sigstore/gh-action-sigstore-python), which uses [`sigstore-python`](https://github.com/sigstore/sigstore-python) to sign repository artifacts. For more information on project Sigstore, see the official [website](https://sigstore.dev/) and [documentation](https://docs.sigstore.dev/).
@@ -47,7 +47,7 @@ More information about permission settings can be found
 
 ## Configuration
 
-`gh-action-sigstore-python` takes a variety of configuration inputs, most of which are
+`sigstore-ansible-github-action` takes a variety of configuration inputs, most of which are
 optional.
 
 ### `project-path`
@@ -57,7 +57,7 @@ The `project-path` input is optional and defaults to the root of the current rep
 Sign a repository sub-path:
 
 ```yaml
-- uses: sigstore/gh-action-sigstore-python@v1.2.3
+- uses: mayaCostantini/sigstore-ansible-github-action@v0.0.3
   with:
     inputs:
       project-path: ./somesubpath/
@@ -71,9 +71,8 @@ The `identity-token` setting controls the OpenID Connect token provided to Fulci
 workflow will use the credentials found in the GitHub Actions environment.
 
 ```yaml
-- uses: sigstore/gh-action-sigstore-python@v1.2.3
+- uses: mayaCostantini/sigstore-ansible-github-action@v0.0.3
   with:
-    inputs: file.txt
     identity-token: ${{ IDENTITY_TOKEN  }} # assigned elsewhere
 ```
 
@@ -87,9 +86,8 @@ Server during OAuth2.
 Example:
 
 ```yaml
-- uses: sigstore/gh-action-sigstore-python@v1.2.3
+- uses: mayaCostantini/sigstore-ansible-github-action@v0.0.3
   with:
-    inputs: file.txt
     oidc-client-id: alternative-sigstore-id
 ```
 
@@ -103,9 +101,7 @@ Connect Server during OAuth2.
 Example:
 
 ```yaml
-- uses: sigstore/gh-action-sigstore-python@v1.2.3
-  with:
-    inputs: file.txt
+- uses: mayaCostantini/sigstore-ansible-github-action@v0.0.3
     oidc-client-secret: alternative-sigstore-secret
 ```
 
@@ -119,9 +115,8 @@ from. This setting cannot be used in combination with the `staging` setting.
 Example:
 
 ```yaml
-- uses: sigstore/gh-action-sigstore-python@v1.2.3
+- uses: mayaCostantini/sigstore-ansible-github-action@v0.0.3
   with:
-    inputs: file.txt
     fulcio-url: https://fulcio.sigstage.dev
 ```
 
@@ -135,9 +130,8 @@ cannot be used in combination with the `staging` setting.
 Example:
 
 ```yaml
-- uses: sigstore/gh-action-sigstore-python@v1.2.3
+- uses: mayaCostantini/sigstore-ansible-github-action@v0.0.3
   with:
-    inputs: file.txt
     rekor-url: https://rekor.sigstage.dev
 ```
 
@@ -151,9 +145,8 @@ in combination with the `staging` setting.
 Example:
 
 ```yaml
-- uses: sigstore/gh-action-sigstore-python@v1.2.3
+- uses: mayaCostantini/sigstore-ansible-github-action@v0.0.3
   with:
-    inputs: file.txt
     ctfe: ./path/to/ctfe.pub
 ```
 
@@ -167,9 +160,8 @@ be used in combination with `staging` setting.
 Example:
 
 ```yaml
-- uses: sigstore/gh-action-sigstore-python@v1.2.3
+- uses: mayaCostantini/sigstore-ansible-github-action@v0.0.3
   with:
-    inputs: file.txt
     ctfe: ./path/to/rekor.pub
 ```
 
@@ -183,9 +175,8 @@ instead of the default production instances.
 Example:
 
 ```yaml
-- uses: sigstore/gh-action-sigstore-python@v1.2.3
+- uses: mayaCostantini/sigstore-ansible-github-action@v0.0.3
   with:
-    inputs: file.txt
     staging: true
 ```
 
