@@ -57,7 +57,7 @@ def _log(msg):
 
 
 def _ansible_sign_sigstore(global_args, sign_args):
-    return ["ansible-sign", "project", "sigstore-sign", *sign_args]
+    return ["ansible-sign", "project", "sigstore-sign", *global_args, *sign_args]
 
 
 def _ansible_verify_sigstore(global_args, verify_args):
@@ -66,6 +66,7 @@ def _ansible_verify_sigstore(global_args, verify_args):
         "project",
         "sigstore-verify",
         "identity",
+        *global_args,
         *verify_args,
     ]
 
@@ -143,6 +144,14 @@ elif not enable_verify and verify_oidc_issuer:
     _fatal_help("verify-oidc-issuer cannot be specified without verify: true")
 elif verify_oidc_issuer:
     sigstore_verify_args.extend(["--cert-oidc-issuer", verify_oidc_issuer])
+
+verify_certificate_chain = os.getenv("GHA_SIGSTORE_PYTHON_VERIFY_CERTIFICATE_CHAIN")
+if not enable_verify and verify_certificate_chain:
+    _fatal_help("verify-certificate-chain cannot be specified without verify: true")
+else:
+    sigstore_verify_args.extend(["--certificate-chain", verify_certificate_chain])
+
+if enable_verify:
     sigstore_verify_args.append(project_path)
 
 sigstore_sign_args.append(project_path)
