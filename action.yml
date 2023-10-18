@@ -71,6 +71,13 @@ inputs:
       required if `verify` is enabled; has no effect otherwise.
     required: false
     default: ""
+  verify-certificate-chain:
+    description: |
+      a certificate chain for the Fulcio private instance to verify the signature against.
+
+      requires `verify` enabled.
+    required: false
+    default: ""
   internal-be-careful-debug:
     description: "run with debug logs (default false)"
     required: false
@@ -117,6 +124,7 @@ runs:
         GHA_SIGSTORE_PYTHON_VERIFY: "${{ inputs.verify }}"
         GHA_SIGSTORE_PYTHON_VERIFY_CERT_IDENTITY: "${{ inputs.verify-cert-identity }}"
         GHA_SIGSTORE_PYTHON_VERIFY_OIDC_ISSUER: "${{ inputs.verify-oidc-issuer }}"
+        GHA_SIGSTORE_PYTHON_VERIFY_CERTIFICATE_CHAIN: "${{ inputs.verify-certificate-chain }}"
         GHA_SIGSTORE_PYTHON_INTERNAL_BE_CAREFUL_DEBUG: "${{ inputs.internal-be-careful-debug }}"
       shell: bash
 
