@@ -35,7 +35,7 @@ jobs:
       - uses: actions/checkout@v3
       - name: install
         run: python -m pip install .
-      - uses: mayaCostantini/sigstore-ansible-github-action@v0.0.1
+      - uses: mayaCostantini/sigstore-ansible-github-action@v0.0.3
 ```
 
 Note: Your workflow **must** have permission to request the OIDC token to authenticate with,
@@ -197,7 +197,7 @@ and `verify-oidc-issuer` settings. Failing to pass these will produce an error.
 Example:
 
 ```yaml
-- uses: mayaCostantini/sigstore-ansible-github-action@v0.0.1
+- uses: mayaCostantini/sigstore-ansible-github-action@v0.0.3
   with:
     verify: true
     verify-oidc-issuer: https://some-oidc-issuer.example.com
@@ -219,7 +219,7 @@ This setting may only be used in conjunction with `verify-oidc-issuer`.
 Supplying it without `verify-oidc-issuer` will produce an error.
 
 ```yaml
-- uses: mayaCostantini/sigstore-ansible-github-action@v0.0.1
+- uses: mayaCostantini/sigstore-ansible-github-action@v0.0.3
   with:
     verify: true
     verify-cert-identity: john.hancock@example.com
@@ -243,7 +243,7 @@ Supplying it without `verify-cert-identity` will produce an error.
 Example:
 
 ```yaml
-- uses: mayaCostantini/sigstore-ansible-github-action@v0.0.1
+- uses: mayaCostantini/sigstore-ansible-github-action@v0.0.3
   with:
     verify: true
     verify-cert-identity: john.hancock@example.com
@@ -271,7 +271,7 @@ Example:
   Example:
 
   ```yaml
-  - uses: mayaCostantini/sigstore-ansible-github-action@v0.0.1
+  - uses: mayaCostantini/sigstore-ansible-github-action@v0.0.3
     with:
       internal-be-careful-debug: true
   ```
